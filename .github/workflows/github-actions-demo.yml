@@ -1,1 +1,45 @@
+name: App Preview
 
+on:
+  pull_request:
+    types:
+      # Trigger the workflow when a label is added or removed.
+      - labeled
+      # Trigger the workflow when a pull request is opened or synchronized.
+      - synchronize
+
+jobs:
+  label_app_preview:
+    # Only run this job if the PR is labeled with "build-app-preview".
+    #
+    # Keep in mind that a new build will be triggered when the PR is labeled
+    # with any lable as long as the label "build-app-preview" is included in the
+    # list of labels. For example, if the PR is labeled with "build-app-preview"
+    # and "bug", the job will be triggered when the label "bug" is removed.
+    if: contains(github.event.pull_request.labels.*.name, 'build-app-preview')
+    runs-on: ubuntu-22.04
+    env:
+      CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+      CODEMAGIC_APP_ID: ${{ secrets.CODEMAGIC_APP_ID }}
+      # From "codemagic.yaml"
+      CODEMAGIC_WORKFLOW_ID: "app_preview"
+    steps:
+      - name: Start Codemagic Build
+        run: |
+          # Get the pull request number from the GITHUB_REF.
+          PULL_REQUEST_NUMBER=$(echo $GITHUB_REF | cut -d / -f 3)
+
+          curl --request POST 'https://api.codemagic.io/builds' \
+            -f \
+            --header 'x-auth-token: '"$CODEMAGIC_TOKEN" \
+            --header 'Content-Type: application/json' \
+            --data-raw "{
+                \"appId\": \"$CODEMAGIC_APP_ID\",
+                \"branch\": \"$GITHUB_HEAD_REF\",
+                \"workflowId\": \"$CODEMAGIC_WORKFLOW_ID\",
+                \"environment\": {
+                    \"variables\": {
+                        \"CM_PULL_REQUEST_NUMBER\": $PULL_REQUEST_NUMBER
+                    }
+                }
+            }"
