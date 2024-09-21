@@ -1,6 +1,6 @@
 workflows:
   app_preview:
-    name: build_app_preview
+    name: app_preview
     environment:
       groups:
         # Adding environment group "github" which includes the GITHUB_PAT
