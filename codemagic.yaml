@@ -1,1 +1,25 @@
-
+workflows:
+  app_preview:
+    name: app_preview
+    environment:
+      groups:
+        # Adding environment group "github" which includes the GITHUB_PAT
+        # variable. GITHUB_PAT is required for posting / editing comments on the pull request
+        - "github"
+        # Adding environment group "codemagic" which includes the CODEMAGIC_TOKEN
+        # variable. Required to make the builds accessible for the app preview tool.
+        - "codemagic"
+    triggering:
+      events:
+        - pull_request
+    # Adding artifacts for Android, iOS, and macOS builds.
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      scripts:
+        - name: testiOS
+          script: |
+            dart pub global activate codemagic_app_preview
+            app_preview post \
+              --github_token $GITHUB_PAT \
+              --codemagic_token $CODEMAGIC_TOKEN
