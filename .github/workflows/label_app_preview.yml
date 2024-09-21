@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
-      CODEMAGIC_APP_ID: ${{ secrets.CODEMAGIC_APP_ID }}
+      CODEMAGIC_APP_ID: "66ee2321cc79eb469e56aa7a"
       # From "codemagic.yaml"
       CODEMAGIC_WORKFLOW_ID: "app_preview"
     steps:
