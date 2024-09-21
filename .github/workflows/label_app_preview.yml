@@ -19,7 +19,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'testiOS')
     runs-on: ubuntu-22.04
     env:
-      CODEMAGIC_TOKEN: ${{ secrets.CODEMAGIC_TOKEN }}
+      CODEMAGIC_TOKEN: "PdH5V7ThVpVICk7Mz0bnYzeNcXUr-WiiSchcf-ojlL8"
       CODEMAGIC_APP_ID: "66ee2321cc79eb469e56aa7a"
       # From "codemagic.yaml"
       CODEMAGIC_WORKFLOW_ID: "app_preview"
