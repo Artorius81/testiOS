@@ -9,6 +9,9 @@ workflows:
         # Adding environment group "codemagic" which includes the CODEMAGIC_TOKEN
         # variable. Required to make the builds accessible for the app preview tool.
         - "codemagic"
+    triggering:
+      events:
+        - pull_request
     # Adding artifacts for Android, iOS, and macOS builds.
     artifacts:
       - build/ios/ipa/*.ipa
